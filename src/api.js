@@ -39,3 +39,16 @@ export const updateArticleVotes = (article_id, inc_votes) => {
     })
     .catch((err) => console.log(err))
 }
+
+export const postCommentToArticle = (article_id, comment) => {
+    return api
+    .post(`/articles/${article_id}/comments`, comment)
+    .then(({ data }) => {
+        console.log(data, "inside api call")
+        return data.comment
+    })
+    .catch((err) => {
+        console.log(err)
+        throw err
+    });
+};
