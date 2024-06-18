@@ -26,7 +26,23 @@
   line-height: 1.6;
 }
 
-.comments-h2 {
+.h2 {
   text-align: center;
   font-weight: bold;
+}
+
+.article-votes {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.article-votes button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 1em;
+}
+
+.error-message {
+  color: red;
+  text-align: center;
 }
