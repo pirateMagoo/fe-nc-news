@@ -42,6 +42,30 @@
   font-size: 1em;
 }
 
+.comments-section {
+  margin-top: 20px;
+}
+
+.comments-section form {
+  margin-bottom: 20px;
+}
+
+.comments-section textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  resize: vertical;
+}
+
+.comments-section button {
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
 .error-message {
   color: red;
   text-align: center;
