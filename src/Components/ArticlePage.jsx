@@ -1,21 +1,25 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchArticleById } from "../api";
+import { fetchArticleById, fetchCommentsByArticleId } from "../api";
 import './ArticlePage.css'
+import CommentCard from "./CommentCard";
+import Loading from "./Loading";
 
 
 function ArticlePage() {
   const { article_id } = useParams();
   const [article, setArticle] = useState(null);
+  const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
       console.log("Use Effect article page!");
-    fetchArticleById(article_id)
-      .then((articleFromApi) => {
-        console.log(articleFromApi, "<---- article from api in use effect")
+    Promise.all([fetchArticleById(article_id), fetchCommentsByArticleId(article_id)])
+      .then(([articleFromApi, commentsFromApi]) => {
+        
         setArticle(articleFromApi);
+        setComments(commentsFromApi);
         setLoading(false);
       })
       .catch((err) => {
@@ -24,9 +28,9 @@ function ArticlePage() {
       });
   }, [article_id]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loading />;
   if (error) return <p>Error: {error}</p>;
-  if (!article) return <p>No article found</p>;
+  
 
   return (
     <div className="article-page">
@@ -42,6 +46,17 @@ function ArticlePage() {
       />
       <section className="article-page-content">
         <p>{article.body}</p>
+      </section>
+      <section className="comments-section">
+        <h2 className="comments-h2">Comments:</h2>
+        {comments.length > 0 ? (
+            comments.map((comment) => (
+                <CommentCard key={comment.comment_id} comment={comment} />
+            ))
+        ) :(
+            <p>Be the first to comment!</p>
+        )}
+
       </section>
     </div>
   );

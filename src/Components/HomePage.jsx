@@ -4,6 +4,7 @@ import { fetchArticles } from "../api";
 import './HomePage.css'
 import NavBar from "./NavBar";
 import ArticleCard from "./ArticleCard";
+import Loading from "./Loading";
 
 function HomePage() {
   const [articles, setArticles] = useState([]);
@@ -24,7 +25,7 @@ function HomePage() {
       });
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loading />
   if (error) return <p>Error: {error}</p>;
 
   return (
