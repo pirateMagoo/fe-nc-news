@@ -38,7 +38,7 @@ export const updateArticleVotes = (article_id, inc_votes) => {
         return data.article;
     })
     .catch((err) => console.log(err))
-}
+};
 
 export const postCommentToArticle = (article_id, comment) => {
     return api
@@ -51,4 +51,10 @@ export const postCommentToArticle = (article_id, comment) => {
         console.log(err)
         throw err
     });
+};
+
+export const deleteCommentById = (comment_id) => {
+    return api
+    .delete(`/comments/${comment_id}`)
+    .then(() => {})
 };

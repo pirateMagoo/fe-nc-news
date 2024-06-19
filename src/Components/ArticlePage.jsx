@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchArticleById, fetchCommentsByArticleId, postCommentToArticle, updateArticleVotes } from "../api";
+import { fetchArticleById, fetchCommentsByArticleId, postCommentToArticle, updateArticleVotes, deleteCommentById } from "../api";
 import './ArticlePage.css'
 import CommentCard from "./CommentCard";
 import Loading from "./Loading";
 
+const loggedInUser = 'tickle122'
 
 function ArticlePage() {
   const { article_id } = useParams();
@@ -52,19 +53,57 @@ function ArticlePage() {
         return;
     }
 
-    setPosting(true);
-    setCommentError(null);
-    postCommentToArticle(article_id, { username: 'tickle122', body: newComment})
-    .then((postedComment) => {
-        setComments((currentComments) => [postedComment, ...currentComments]);
-        setNewComment('');
-        setPosting(false)
+    const optimisticComment = {
+        comment_id: Date.now(),
+        author: loggedInUser,
+        body: newComment,
+        created_at: new Date().toISOString(),
+        deleting: false,
+    }
+
+   setComments((currentComments) => [optimisticComment, ...currentComments]);
+   setNewComment('');
+   setPosting(true);
+   setCommentError(null);
+
+   postCommentToArticle(article_id, {username: loggedInUser, body: newComment})
+   .then((postedComment) => {
+    setComments((currentComments) =>
+    currentComments.map((comment) =>
+    comment.comment_id === optimisticComment.comment_id ? postedComment : comment))
+
+    setPosting(false);
+   })
+   .catch((err) => {
+    setComments((currentComments) =>
+    currentComments.filter((comment) => comment.comment_id !== optimisticComment.comment_id));
+    setCommentError("Sorry! Comment failed to post. Please have another go");
+    setPosting(false);
+   })
+  }
+
+  const handleDeleteComment = (comment_id) => {
+    setComments((currentComments) =>
+      currentComments.map((comment) =>
+        comment.comment_id === comment_id ? { ...comment, deleting: true } : comment
+      )
+    );
+
+    deleteCommentById(comment_id)
+    .then(() => {
+      setComments((currentComments) =>
+        currentComments.filter((comment) => comment.comment_id !== comment_id)
+      );
     })
     .catch((err) => {
-        setCommentError("Comment failed to post. Please try again");
-        setPosting(false);
-    })
-  }
+      setError("Failed to delete comment, please try again");
+      setComments((currentComments) =>
+        currentComments.map((comment) =>
+          comment.comment_id === comment_id ? { ...comment, deleting: false } : comment
+        )
+      );
+    });
+};
 
   
 
@@ -106,7 +145,7 @@ function ArticlePage() {
         </form>
         {comments.length > 0 ? (
             comments.map((comment) => (
-                <CommentCard key={comment.comment_id} comment={comment} />
+                <CommentCard key={comment.comment_id} comment={comment} handleDeleteComment={handleDeleteComment} loggedInUser={loggedInUser} />
             ))
         ) :(
             <p>Be the first to comment!</p>
