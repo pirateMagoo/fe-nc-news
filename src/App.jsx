@@ -3,6 +3,9 @@ import { Link, Route, Routes } from "react-router-dom";
 import "./App.css";
 import HomePage from "./Components/HomePage";
 import ArticlePage from "./Components/ArticlePage";
+import TopicArticlesPage from "./Components/TopicArticlesPage";
+import TopicsPage from "./Components/TopicsPage";
+import NavBar from "./Components/NavBar";
 
 function App() {
   return (
@@ -11,6 +14,8 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/articles/:article_id" element={<ArticlePage />} />
+          <Route path="/articles" element={<TopicArticlesPage />} />
+          <Route path="/topics" element={<TopicsPage />} />
         </Routes>
       </main>
     
