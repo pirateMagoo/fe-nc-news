@@ -1,31 +1,35 @@
-import { useEffect, useState } from "react";
-import { Link, Route, Routes } from "react-router-dom";
-import { fetchArticles } from "../api";
-import './HomePage.css'
-import NavBar from "./NavBar";
-import ArticleCard from "./ArticleCard";
-import Loading from "./Loading";
+
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import NavBar from './NavBar';
+import ArticleCard from './ArticleCard';
+import Loading from './Loading';
+import SortControls from './SortControls';  
+import { fetchArticles } from '../api';
+import './HomePage.css';
 
 function HomePage() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchParams] = useSearchParams();
 
-  console.log(articles, "homepage");
+  const sort_by = searchParams.get('sort_by') || 'created_at';
+  const order = searchParams.get('order') || 'desc';
+
   useEffect(() => {
-    fetchArticles()
+    fetchArticles(null, sort_by, order)
       .then((articlesFromApi) => {
-        setArticles(articlesFromApi);
+        setArticles(articlesFromApi || []);
         setLoading(false);
-        console.log("Use Effect!");
       })
       .catch((err) => {
         setError(err.message);
         setLoading(false);
       });
-  }, []);
+  }, [sort_by, order]);
 
-  if (loading) return <Loading />
+  if (loading) return <Loading />;
   if (error) return <p>Error: {error}</p>;
 
   return (
@@ -35,10 +39,15 @@ function HomePage() {
         <NavBar />
       </header>
       <main>
+        <SortControls /> 
         <ul className="articles-container">
-          {articles.map((article) => (
-            <ArticleCard key={article.article_id} article={article} />
-          ))}
+          {articles.length > 0 ? (
+            articles.map((article) => (
+              <ArticleCard key={article.article_id} article={article} />
+            ))
+          ) : (
+            <p>No articles found</p>
+          )}
         </ul>
       </main>
     </>
@@ -46,3 +55,4 @@ function HomePage() {
 }
 
 export default HomePage;
+

@@ -8,6 +8,7 @@ function NavBar() {
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedTopic, setSelectedTopic] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,6 +25,7 @@ function NavBar() {
 
   const handleTopicChange = (event) => {
     const topic = event.target.value;
+    setSelectedTopic(topic);
     if (topic) {
       navigate(`/articles?topic=${topic}`);
     } else {
@@ -44,8 +46,8 @@ function NavBar() {
         ) : error ? (
           <p>Error loading topics</p>
         ) : (
-          <select onChange={handleTopicChange} defaultValue="">
-            <option value="" disabled selected>Select a topic</option>
+          <select value={selectedTopic} onChange={handleTopicChange}>
+            <option value="" disabled>Select a topic</option>
             {topics.map((topic) => (
               <option key={topic.slug} value={topic.slug}>
                 {topic.slug}

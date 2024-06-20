@@ -11,3 +11,14 @@
     font-weight: bolder;
     background-color: blueviolet;
   }
+
+  .sort-controls {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .sort-controls label {
+    margin: 0 10px;
+    font-size: 1em;
+  }
