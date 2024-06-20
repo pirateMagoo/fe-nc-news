@@ -1,0 +1,19 @@
+.h1 {
+    text-align: center;
+    font-size: xx-large;
+    font-weight: bolder;
+    margin-bottom: 100px;
+}
+
+.topics-list {
+    text-align: center;
+    font-size: x-large;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.topic {
+    margin-bottom: 20px;
+    text-decoration: none;
+}
+  
