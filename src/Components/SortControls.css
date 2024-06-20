@@ -1,0 +1,17 @@
+
+.sort-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .sort-controls label {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+  }
+  
+  .sort-controls select {
+    margin-left: 5px;
+  }
+  
