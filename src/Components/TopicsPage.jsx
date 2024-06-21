@@ -20,7 +20,7 @@ function TopicsPage() {
             
         })
         .catch((err) => {
-            setError(err.message)
+            setError(err.response.data.msg)
             setLoading(false)
         })
     }, []);

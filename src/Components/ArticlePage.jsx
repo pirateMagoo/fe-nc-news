@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { fetchArticleById, updateArticleVotes } from "../api";
 import './ArticlePage.css';
 import Loading from "./Loading";
 import Comments from "./Comments";
 import NavBar from "./NavBar";
+import { UserContext } from '../UserContext'
 
 function ArticlePage() {
   const { article_id } = useParams();
@@ -13,6 +14,7 @@ function ArticlePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [hasVoted, setHasVoted] = useState(false);
+  const { currentUser } = useContext(UserContext);
 
   useEffect(() => {
     fetchArticleById(article_id)
@@ -21,7 +23,7 @@ function ArticlePage() {
         setLoading(false);
       })
       .catch((err) => {
-        setError(err.message);
+        setError(err.response.data.msg || 'An error occured');
         setLoading(false);
       });
   }, [article_id]);
@@ -63,7 +65,7 @@ function ArticlePage() {
         <button onClick={() => handleVote(-1)} disabled={hasVoted}>Dislike</button>
       </section>
       {error && <p className="error-message">{error}</p>}
-      <Comments article_id={article_id} /> 
+      <Comments article_id={article_id} currentUser={currentUser} /> 
     </div>
   );
 }
