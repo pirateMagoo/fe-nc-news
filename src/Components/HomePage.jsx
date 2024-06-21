@@ -35,7 +35,7 @@ function HomePage() {
   
 
   if (loading) return <Loading />;
-  if (error) return <p>Error: {error}</p>;
+  if (error) return <p className='error-message'>Error: {error}</p>;
 
   return (
     <>
