@@ -28,7 +28,7 @@ function TopicArticlesPage() {
         setLoading(false);
       })
       .catch((err) => {
-        setError(err.message);
+        setError(err.response.data.msg);
         setLoading(false);
       });
   }, [topic, sort_by, order]);

@@ -12,6 +12,19 @@
     background-color: blueviolet;
   }
 
+  .current-user {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .user-avatar {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
+
   .sort-controls {
     display: flex;
     justify-content: center;

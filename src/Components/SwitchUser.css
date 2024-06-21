@@ -1,0 +1,13 @@
+.switch-user {
+    margin: 20px 0;
+}
+
+.switch-user label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.switch-user select {
+    padding: 5px;
+    font-size: 1em;
+}

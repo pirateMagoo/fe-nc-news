@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { fetchCommentsByArticleId, postCommentToArticle, deleteCommentById } from '../api';
 import CommentCard from './CommentCard';
 import Loading from './Loading';
-import './Comments.css'; // Import CSS
+import './Comments.css'; 
+import { UserContext } from '../UserContext'
 
-const loggedInUser = 'tickle122';
+
 
 function Comments({ article_id }) {
+  const { currentUser } = useContext(UserContext);
+
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,7 +24,7 @@ function Comments({ article_id }) {
         setLoading(false);
       })
       .catch((err) => {
-        setError(err.message);
+        setError(err.response.data.msg || 'An error occured');
         setLoading(false);
       });
   }, [article_id]);
@@ -35,7 +38,7 @@ function Comments({ article_id }) {
 
     const optimisticComment = {
       comment_id: Date.now(),
-      author: loggedInUser,
+      author: currentUser.username,
       body: newComment,
       created_at: new Date().toISOString(),
       deleting: false,
@@ -46,7 +49,7 @@ function Comments({ article_id }) {
     setPosting(true);
     setCommentError(null);
 
-    postCommentToArticle(article_id, { username: loggedInUser, body: newComment })
+    postCommentToArticle(article_id, { username: currentUser.username, body: newComment })
       .then((postedComment) => {
         setComments((currentComments) =>
           currentComments.map((comment) =>
@@ -109,7 +112,7 @@ function Comments({ article_id }) {
             key={comment.comment_id}
             comment={comment}
             handleDeleteComment={handleDeleteComment}
-            loggedInUser={loggedInUser}
+            loggedInUser={currentUser.username}
           />
         ))
       ) : (
